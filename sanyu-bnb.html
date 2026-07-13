@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sanyu BnB — Restaurant &amp; Guesthouse</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Manrope:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ivory:#FAF6EC;
+    --forest:#163829;
+    --forest-deep:#0E241A;
+    --gold:#D6A419;
+    --rust:#B5502F;
+    --ink:#221C16;
+    --line: rgba(34,28,22,0.14);
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--ivory);
+    color:var(--ink);
+    font-family:'Manrope', sans-serif;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  a{color:inherit; text-decoration:none;}
+  img{display:block; max-width:100%;}
+  .wrap{max-width:1180px; margin:0 auto; padding:0 32px;}
+
+  h1,h2,h3{font-family:'Instrument Serif', serif; font-weight:400; line-height:1.05; letter-spacing:-0.01em;}
+
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12.5px;
+    letter-spacing:0.18em;
+    text-transform:uppercase;
+    color:var(--rust);
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .eyebrow::before{
+    content:"";
+    width:22px; height:1px; background:var(--rust);
+    display:inline-block;
+  }
+
+  /* ===== NAV ===== */
+  header{
+    position:fixed; top:0; left:0; right:0; z-index:100;
+    background:rgba(250,246,236,0.88);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  nav.wrap{
+    display:flex; align-items:center; justify-content:space-between;
+    height:78px;
+  }
+  .logo{
+    font-family:'Instrument Serif', serif;
+    font-style:italic;
+    font-size:26px;
+    color:var(--forest);
+  }
+  .logo span{color:var(--rust); font-style:normal;}
+  .nav-links{display:flex; gap:36px; font-size:14.5px; font-weight:600;}
+  .nav-links a{position:relative; padding:4px 0;}
+  .nav-links a::after{
+    content:""; position:absolute; left:0; bottom:0; width:0; height:1.5px;
+    background:var(--rust); transition:width .25s ease;
+  }
+  .nav-links a:hover::after{width:100%;}
+  .nav-call{
+    display:flex; align-items:center; gap:8px;
+    background:var(--forest); color:var(--ivory);
+    padding:11px 20px; border-radius:100px;
+    font-size:14px; font-weight:700;
+    transition:background .2s ease;
+  }
+  .nav-call:hover{background:var(--forest-deep);}
+  .nav-toggle{display:none;}
+
+  /* ===== HERO ===== */
+  .hero{
+    position:relative;
+    min-height:100vh;
+    display:flex; align-items:flex-end;
+    padding-top:78px;
+    overflow:hidden;
+  }
+  .hero-img{
+    position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
+    filter:saturate(1.05);
+  }
+  .hero-scrim{
+    position:absolute; inset:0;
+    background:
+      linear-gradient(0deg, rgba(14,36,26,0.94) 0%, rgba(14,36,26,0.55) 45%, rgba(14,36,26,0.35) 100%);
+  }
+  .hero-content{
+    position:relative; z-index:2; color:var(--ivory);
+    padding-bottom:88px; width:100%;
+  }
+  .hero-content .eyebrow{color:var(--gold);}
+  .hero-content .eyebrow::before{background:var(--gold);}
+  .hero-title{
+    font-size:clamp(56px, 9vw, 128px);
+    margin:18px 0 22px;
+  }
+  .hero-title em{color:var(--gold); font-style:italic;}
+  .hero-sub{
+    max-width:480px; font-size:17px; color:rgba(250,246,236,0.85);
+    margin-bottom:34px;
+  }
+  .hero-actions{display:flex; gap:16px; flex-wrap:wrap;}
+  .btn{
+    display:inline-flex; align-items:center; gap:10px;
+    padding:16px 28px; border-radius:100px;
+    font-weight:700; font-size:14.5px;
+    letter-spacing:0.01em;
+    transition:transform .2s ease, background .2s ease, color .2s ease;
+    border:1.5px solid transparent;
+  }
+  .btn-primary{background:var(--gold); color:var(--forest-deep);}
+  .btn-primary:hover{transform:translateY(-2px);}
+  .btn-ghost{border-color:rgba(250,246,236,0.5); color:var(--ivory);}
+  .btn-ghost:hover{background:rgba(250,246,236,0.12); transform:translateY(-2px);}
+
+  .hero-strip{
+    position:absolute; bottom:0; left:0; right:0; z-index:3;
+    display:flex; border-top:1px solid rgba(250,246,236,0.18);
+    background:rgba(14,36,26,0.5);
+  }
+  .hero-strip div{
+    flex:1; text-align:center; padding:14px 8px;
+    font-family:'IBM Plex Mono', monospace; font-size:12px;
+    color:rgba(250,246,236,0.75); letter-spacing:0.04em;
+    border-right:1px solid rgba(250,246,236,0.18);
+  }
+  .hero-strip div:last-child{border-right:none;}
+  .hero-strip strong{color:var(--gold); display:block; font-size:13px; margin-bottom:2px;}
+
+  /* ===== SECTION GENERIC ===== */
+  section{padding:120px 0;}
+  .section-head{
+    max-width:640px; margin-bottom:64px;
+  }
+  .section-head h2{font-size:clamp(36px,4.6vw,54px); margin-top:16px;}
+
+  /* ===== ABOUT ===== */
+  .about{background:var(--ivory);}
+  .about .wrap{
+    display:grid; grid-template-columns:0.9fr 1.1fr; gap:72px; align-items:center;
+  }
+  .about-media{position:relative;}
+  .about-media img{
+    border-radius:6px; width:100%; height:460px; object-fit:cover;
+  }
+  .about-tag{
+    position:absolute; bottom:-24px; left:-24px;
+    background:var(--forest); color:var(--ivory);
+    padding:22px 26px; border-radius:6px;
+    font-family:'Instrument Serif', serif; font-style:italic; font-size:22px;
+    max-width:230px; line-height:1.25;
+    box-shadow:0 18px 40px rgba(14,36,26,0.25);
+  }
+  .about-tag b{color:var(--gold); font-style:normal; font-family:'IBM Plex Mono',monospace; font-size:13px; letter-spacing:0.05em; display:block; margin-bottom:6px;}
+  .about-copy p{color:rgba(34,28,22,0.72); font-size:16px; margin-bottom:20px; max-width:480px;}
+  .about-list{list-style:none; margin-top:32px; display:grid; gap:14px;}
+  .about-list li{
+    display:flex; gap:14px; font-size:15px; align-items:flex-start;
+  }
+  .about-list li::before{
+    content:"◆"; color:var(--rust); font-size:9px; margin-top:7px;
+  }
+
+  /* ===== MENU (ticket cards) ===== */
+  .menu{background:var(--forest); color:var(--ivory); position:relative;}
+  .menu .section-head .eyebrow{color:var(--gold);}
+  .menu .section-head .eyebrow::before{background:var(--gold);}
+  .menu .section-head h2{color:var(--ivory);}
+  .menu .section-head p{color:rgba(250,246,236,0.7); margin-top:14px; font-size:16px;}
+
+  .menu-grid{
+    display:grid; grid-template-columns:repeat(3, 1fr); gap:28px;
+  }
+  .ticket{
+    background:var(--ivory); color:var(--ink);
+    border-radius:4px;
+    position:relative;
+    padding:30px 26px 26px;
+    background-image:
+      radial-gradient(circle at 0 50%, var(--forest) 9px, transparent 10px),
+      radial-gradient(circle at 100% 50%, var(--forest) 9px, transparent 10px);
+    background-position: left 50%, right 50%;
+    background-repeat:no-repeat;
+  }
+  .ticket::before{
+    content:"";
+    position:absolute; left:14px; right:14px; top:50%;
+    border-top:1.5px dashed var(--line);
+  }
+  .ticket-head{
+    display:flex; justify-content:space-between; align-items:baseline;
+    font-family:'IBM Plex Mono', monospace; font-size:11.5px;
+    letter-spacing:0.1em; text-transform:uppercase; color:var(--rust);
+    margin-bottom:16px;
+  }
+  .ticket h3{font-size:28px; margin-bottom:10px;}
+  .ticket p{font-size:14px; color:rgba(34,28,22,0.65); margin-bottom:22px; min-height:44px;}
+  .ticket-price{
+    display:flex; justify-content:space-between; align-items:center;
+    font-family:'IBM Plex Mono', monospace;
+  }
+  .ticket-price .amt{font-size:22px; font-weight:500; color:var(--forest);}
+  .ticket-price .tag{font-size:11px; color:var(--rust); letter-spacing:0.08em;}
+
+  /* ===== DRINKS / GALLERY BAND ===== */
+  .band{
+    background:var(--ivory);
+  }
+  .band .wrap{
+    display:grid; grid-template-columns:1.05fr 0.95fr; gap:0; align-items:stretch;
+    border-radius:8px; overflow:hidden;
+    background:var(--forest);
+  }
+  .band-copy{padding:64px; color:var(--ivory);}
+  .band-copy .eyebrow{color:var(--gold);}
+  .band-copy .eyebrow::before{background:var(--gold);}
+  .band-copy h2{color:var(--ivory); font-size:clamp(32px,4vw,46px); margin:16px 0 20px;}
+  .band-copy p{color:rgba(250,246,236,0.75); font-size:15.5px; max-width:400px; margin-bottom:28px;}
+  .band-img{position:relative; min-height:340px;}
+  .band-img img{width:100%; height:100%; object-fit:cover; position:absolute; inset:0;}
+
+  /* ===== TESTIMONIAL ===== */
+  .quote-section{text-align:center; padding:100px 0;}
+  .quote-section blockquote{
+    font-family:'Instrument Serif', serif; font-style:italic;
+    font-size:clamp(26px,3.6vw,40px); max-width:800px; margin:0 auto 24px;
+    color:var(--forest);
+  }
+  .quote-section cite{
+    font-family:'IBM Plex Mono', monospace; font-style:normal;
+    font-size:12.5px; letter-spacing:0.1em; text-transform:uppercase; color:var(--rust);
+  }
+
+  /* ===== VISIT / CONTACT ===== */
+  .visit{background:var(--forest-deep); color:var(--ivory);}
+  .visit .wrap{
+    display:grid; grid-template-columns:1fr 1fr; gap:72px;
+  }
+  .visit .eyebrow{color:var(--gold);}
+  .visit .eyebrow::before{background:var(--gold);}
+  .visit h2{color:var(--ivory); font-size:clamp(34px,4vw,50px); margin:16px 0 26px;}
+  .visit-row{
+    display:flex; justify-content:space-between; padding:18px 0;
+    border-bottom:1px solid rgba(250,246,236,0.14);
+    font-size:15px;
+  }
+  .visit-row span:first-child{color:rgba(250,246,236,0.55); font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.08em; text-transform:uppercase;}
+  .visit-row span:last-child{text-align:right; font-weight:600;}
+  .visit-call{
+    margin-top:36px; display:flex; gap:16px; flex-wrap:wrap;
+  }
+  .map-box{
+    border-radius:8px; overflow:hidden; border:1px solid rgba(250,246,236,0.15);
+    min-height:380px; position:relative;
+  }
+  .map-box iframe{width:100%; height:100%; min-height:380px; border:0; filter:grayscale(0.3) sepia(0.15);}
+
+  /* ===== FOOTER ===== */
+  footer{background:var(--forest-deep); color:rgba(250,246,236,0.55); border-top:1px solid rgba(250,246,236,0.1);}
+  footer .wrap{
+    padding:36px 32px; display:flex; justify-content:space-between; align-items:center;
+    font-size:13px;
+  }
+  footer .logo{font-size:20px;}
+
+  @media (max-width:860px){
+    .nav-links{display:none;}
+    .about .wrap, .visit .wrap, .band .wrap{grid-template-columns:1fr;}
+    .menu-grid{grid-template-columns:1fr;}
+    .about-tag{position:static; margin-top:-40px; margin-left:20px; max-width:none;}
+    .band-copy{padding:44px 28px;}
+    footer .wrap{flex-direction:column; gap:10px; text-align:center;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <nav class="wrap">
+    <a href="#" class="logo">Sanyu <span>BnB</span></a>
+    <div class="nav-links">
+      <a href="#about">About</a>
+      <a href="#menu">Menu</a>
+      <a href="#drinks">Drinks</a>
+      <a href="#visit">Visit</a>
+    </div>
+    <a class="nav-call" href="tel:0781313742">📞 0781 313 742</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <img class="hero-img" src="https://images.unsplash.com/photo-1771285119408-04cca3b35036?fm=jpg&q=80&w=1800&auto=format&fit=crop" alt="Grilled platter at Sanyu BnB">
+  <div class="hero-scrim"></div>
+  <div class="hero-content wrap">
+    <div class="eyebrow">Sanyu BnB · Kitchen &amp; Guesthouse</div>
+    <h1 class="hero-title">Good food,<br><em>warm</em> welcome.</h1>
+    <p class="hero-sub">Home-style grills, fresh juices and a table that always has room for one more. Sanyu means joy — come taste why.</p>
+    <div class="hero-actions">
+      <a href="tel:0781313742" class="btn btn-primary">Call to reserve — 0781 313 742</a>
+      <a href="#menu" class="btn btn-ghost">See the menu</a>
+    </div>
+  </div>
+  <div class="hero-strip">
+    <div><strong>Open Daily</strong>8am – 10pm</div>
+    <div><strong>Est.</strong>Family owned</div>
+    <div><strong>Specialty</strong>Charcoal grill</div>
+    <div><strong>Also</strong>Guest rooms on site</div>
+  </div>
+</section>
+
+<section class="about" id="about">
+  <div class="wrap">
+    <div class="about-media">
+      <img src="https://images.unsplash.com/photo-1749871615234-98bff62995ba?fm=jpg&q=80&w=1200&auto=format&fit=crop" alt="Warm dining room at Sanyu BnB">
+      <div class="about-tag"><b>Since day one</b>Every dish made to order, every guest greeted by name.</div>
+    </div>
+    <div class="about-copy">
+      <div class="eyebrow">Our story</div>
+      <h2>A kitchen that feels like home</h2>
+      <p>Sanyu BnB started as a family table before it was ever a restaurant. That's still how we cook — unhurried, generous, and seasoned properly. Everything on the grill is prepared fresh each morning.</p>
+      <p>Whether you're stopping in for lunch, settling in for a long dinner, or staying the night in one of our guest rooms, the goal is the same: you leave fuller and lighter than you arrived.</p>
+      <ul class="about-list">
+        <li>Charcoal-grilled meats &amp; fresh fish, prepared daily</li>
+        <li>Cozy indoor seating plus a shaded outdoor patio</li>
+        <li>Comfortable guest rooms available for overnight stays</li>
+        <li>Private space for gatherings and celebrations</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="menu" id="menu">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">On the menu</div>
+      <h2>House favourites</h2>
+      <p>A short list of what we're known for — ask your server about the daily specials too.</p>
+    </div>
+    <div class="menu-grid">
+      <div class="ticket">
+        <div class="ticket-head"><span>No. 01</span><span>Grill</span></div>
+        <h3>Charcoal Chicken Platter</h3>
+        <p>Marinated overnight, grilled to order, served with rice and grilled vegetables.</p>
+        <div class="ticket-price"><span class="amt">Market price</span><span class="tag">Chef's pick</span></div>
+      </div>
+      <div class="ticket">
+        <div class="ticket-head"><span>No. 02</span><span>Grill</span></div>
+        <h3>Mixed Meat Skewers</h3>
+        <p>Beef, chicken and lamb skewers with a smoky pepper glaze and side salad.</p>
+        <div class="ticket-price"><span class="amt">Market price</span><span class="tag">Popular</span></div>
+      </div>
+      <div class="ticket">
+        <div class="ticket-head"><span>No. 03</span><span>Kitchen</span></div>
+        <h3>Traditional Combo Plate</h3>
+        <p>A rotating plate of local favourites — ask your server what's fresh today.</p>
+        <div class="ticket-price"><span class="amt">Market price</span><span class="tag">Daily special</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="band" id="drinks">
+  <div class="wrap">
+    <div class="band-copy">
+      <div class="eyebrow">Fresh &amp; cold</div>
+      <h2>Juices squeezed the same day</h2>
+      <p>Passion fruit, mango, pineapple and orange, pressed fresh in-house — no shortcuts, no syrups. The perfect pairing for anything off the grill.</p>
+      <a href="tel:0781313742" class="btn btn-primary">Order ahead — 0781 313 742</a>
+    </div>
+    <div class="band-img">
+      <img src="https://images.unsplash.com/photo-1583577612013-4fecf7bf8f13?fm=jpg&q=80&w=1200&auto=format&fit=crop" alt="Fresh juices at Sanyu BnB">
+    </div>
+  </div>
+</section>
+
+<section class="quote-section">
+  <div class="wrap">
+    <blockquote>"Sanyu means joy, and honestly, that's exactly what this place serves — good food and better company."</blockquote>
+    <cite>— A regular guest</cite>
+  </div>
+</section>
+
+<section class="visit" id="visit">
+  <div class="wrap">
+    <div>
+      <div class="eyebrow">Find us</div>
+      <h2>Come sit at our table</h2>
+      <div class="visit-row"><span>Phone</span><span>0781 313 742</span></div>
+      <div class="visit-row"><span>Hours</span><span>Daily, 8am – 10pm</span></div>
+      <div class="visit-row"><span>Kitchen</span><span>Grill, kitchen &amp; fresh juice bar</span></div>
+      <div class="visit-row"><span>Stay</span><span>Guest rooms available on request</span></div>
+      <div class="visit-call">
+        <a href="tel:0781313742" class="btn btn-primary">Call now — 0781 313 742</a>
+      </div>
+    </div>
+    <div class="map-box">
+      <iframe src="https://www.google.com/maps?q=restaurant&output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <a href="#" class="logo">Sanyu <span style="color:#D6A419">BnB</span></a>
+    <div>© 2026 Sanyu BnB · 0781 313 742</div>
+  </div>
+</footer>
+
+</body>
+</html>
