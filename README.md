@@ -1,2 +1,2 @@
-# Sanyu-BnB
+# index
 Restaurant and BnB website 
